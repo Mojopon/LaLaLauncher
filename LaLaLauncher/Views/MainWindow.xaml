@@ -1,0 +1,35 @@
+﻿<Window x:Class="LaLaLauncher.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+        xmlns:local="clr-namespace:LaLaLauncher.Views"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:viewmodels="clr-namespace:LaLaLauncher.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
+        Title="LaLaLauncher" Height="350" Width="525">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+        </i:EventTrigger>
+
+        <i:EventTrigger EventName="Closed">
+            <l:DataContextDisposeAction/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <ContentControl x:Name="mainContent" Content="{Binding Content}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:LaunchableListViewModel}">
+                    <local:LaunchableList />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
+</Window>
