@@ -21,26 +21,26 @@ namespace LaLaLauncher.Models.Managers
                 return PathUtility.CreatePathFromFileName("Launchables.xml", "StoredModels");
             }
         }
-        private ObservableCollection<Launchable> launchables;
+        private ObservableCollection<LaunchableGroup> compositeLaunchables;
 
         public static LaunchableManager Instance { get; } = new LaunchableManager();
         public LaunchableManager()
         {
-            launchables = FileUtility.Load<ObservableCollection<Launchable>>(localFilePath);
-            foreach(Launchable launchable in launchables)
+            compositeLaunchables = FileUtility.Load<ObservableCollection<LaunchableGroup>>(localFilePath);
+            foreach(LaunchableGroup compositeLaunchable in compositeLaunchables)
             {
-                launchable.GetApplicationInfoFromThePath();
+                compositeLaunchable.UpdateLaunchableInfos();
             }
         }
 
-        public ObservableCollection<Launchable> GetLaunchables()
+        public ObservableCollection<LaunchableGroup> GetLaunchables()
         {
-            return launchables;
+            return compositeLaunchables;
         }
 
         public void Save()
         {
-            FileUtility.Save(launchables, localFilePath);
+            FileUtility.Save(compositeLaunchables, localFilePath);
         }
     }
 }

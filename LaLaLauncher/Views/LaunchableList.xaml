@@ -29,10 +29,10 @@
         <Grid.Resources>
             <Style TargetType="{x:Type local:LaunchableInformation}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding LaunchableSelected}" Value="true">
+                    <DataTrigger Binding="{Binding GroupSelected}" Value="true">
                         <Setter Property="Visibility" Value="Visible"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding LaunchableSelected}" Value="false">
+                    <DataTrigger Binding="{Binding GroupSelected}" Value="false">
                         <Setter Property="Visibility" Value="Hidden"/>
                     </DataTrigger>
                 </Style.Triggers>
@@ -65,18 +65,18 @@
                 <Button Name="createNewButton" Grid.Column="0" Width="60" Height="30" Content="New">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
-                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddNewLaunchable" />
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="CreateNewCompositeLaunchable" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Name="launchButton" Grid.Column="1" Width="60" Height="30" Content="Launch" IsEnabled="{Binding LaunchableSelected}">
+                <Button Name="launchButton" Grid.Column="1" Width="60" Height="30" Content="Launch" IsEnabled="{Binding GroupSelected}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LaunchSelected" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <Button Name="deleteButton" Grid.Column="2" Width="60" Height="30" Content="Delete" IsEnabled="{Binding LaunchableSelected}">
+                <Button Name="deleteButton" Grid.Column="2" Width="60" Height="30" Content="Delete" IsEnabled="{Binding GroupSelected}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DeleteSelectedLaunchable" />
@@ -88,8 +88,8 @@
             <ListView 
             Grid.Row="1"
             Name="applicationListView"
-            ItemsSource="{Binding Launchables}"
-            SelectedItem="{Binding SelectedLaunchable}"
+            ItemsSource="{Binding LaunchableGroups}"
+            SelectedItem="{Binding SelectedGroup}"
             ItemContainerStyle="{DynamicResource ListViewItemStyle}"
             SelectionMode="Extended"
             AllowDrop="True"

@@ -19,52 +19,50 @@ namespace LaLaLauncher.ViewModels
 {
     public class LaunchableListViewModel : ViewModel
     {
-        private ObservableCollection<Launchable> _Launchables = new ObservableCollection<Launchable>();
-        public ObservableCollection<Launchable> Launchables { get { return _Launchables; } }
+        private ObservableCollection<LaunchableGroup> _LaunchableGroups = new ObservableCollection<LaunchableGroup>();
+        public ObservableCollection<LaunchableGroup> LaunchableGroups { get { return _LaunchableGroups; } }
 
         #region SelectedItem変更通知プロパティ
-        private Launchable _SelectedLaunchable;
+        private LaunchableGroup _SelectedGroup;
 
-        public Launchable SelectedLaunchable
+        public LaunchableGroup SelectedGroup
         {
             get
-            { return _SelectedLaunchable; }
+            { return _SelectedGroup; }
             set
             {
-                if (_SelectedLaunchable == value)
+                if (_SelectedGroup == value)
                     return;
-                _SelectedLaunchable = value;
+                _SelectedGroup = value;
                 RaisePropertyChanged();
                 UpdateLaunchableInformation();
-                if (_SelectedLaunchable != null)
+                if (_SelectedGroup != null)
                 {
-                    LaunchableSelected = true;
+                    GroupSelected = true;
                 }
                 else
                 {
-                    LaunchableSelected = false;
+                    GroupSelected = false;
                 }
             }
         }
         #endregion
 
-
         #region LaunchableSelected変更通知プロパティ
-        private bool _LaunchableSelected;
-        public bool LaunchableSelected
+        private bool _GroupSelected;
+        public bool GroupSelected
         {
             get
-            { return _LaunchableSelected; }
+            { return _GroupSelected; }
             set
             { 
-                if (_LaunchableSelected == value)
+                if (_GroupSelected == value)
                     return;
-                _LaunchableSelected = value;
+                _GroupSelected = value;
                 RaisePropertyChanged();
             }
         }
         #endregion
-
 
         #region InformationContent変更通知プロパティ
         private LaunchableInformationViewModel _InformationContent;
@@ -86,18 +84,40 @@ namespace LaLaLauncher.ViewModels
 
         public LaunchableListViewModel()
         {
-            LaunchableSelected = false;
-            _Launchables = LaunchableManager.Instance.GetLaunchables();
+            GroupSelected = false;
+            _LaunchableGroups = LaunchableManager.Instance.GetLaunchables();
             UpdateLaunchableInformation();
         }
 
         void UpdateLaunchableInformation()
         {
-            InformationContent = new LaunchableInformationViewModel(_SelectedLaunchable);
+            //InformationContent = new LaunchableInformationViewModel(_SelectedGroup);
         }
 
         public void Initialize()
         {
+        }
+
+        public void CreateNewCompositeLaunchable()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Filter = "アプリケーション(.exe)|*.exe|All Files (*.*)|*.*";
+
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                var path = openFileDialog.FileName;
+
+                var newLaunchable = Launchable.Create(path);
+                if(newLaunchable != null)
+                {
+                    var newGroup = new LaunchableGroup();
+                    newGroup.Add(newLaunchable);
+                    Console.WriteLine("new composite launchable created");
+                    LaunchableGroups.Add(newGroup);
+                }
+            }
         }
 
         public void AddNewLaunchable()
@@ -117,28 +137,41 @@ namespace LaLaLauncher.ViewModels
 
         public void AddNewLaunchable(string path)
         {
-            Launchable newLaunchable = new Launchable(path);
-            Launchables.Add(newLaunchable);
+            /*
+            var newLaunchable = Launchable.Create(path);
+            if (newLaunchable == null) return;
+
+            CompositeLaunchables.Add(newLaunchable);
+            SaveLaunchables();
+            */
+        }
+
+        void SaveLaunchables()
+        {
+            LaunchableManager.Instance.Save();
         }
 
         public void DeleteSelectedLaunchable()
         {
-            if (SelectedLaunchable == null) return;
+            if (SelectedGroup == null) return;
 
-            var selectedLaunchables = Launchables.Where(x => x.IsSelected == true).ToArray();
+            var selectedLaunchables = LaunchableGroups.Where(x => x.IsSelected == true).ToArray();
             foreach (var launchable in selectedLaunchables)
-                Launchables.Remove(launchable);
+                LaunchableGroups.Remove(launchable);
 
-            SelectedLaunchable = null;
+            SelectedGroup = null;
+            SaveLaunchables();
         }
 
         public void LaunchSelected()
         {
+            /*
             if (SelectedLaunchable == null) return;
 
-            var selectedLaunchables = Launchables.Where(x => x.IsSelected == true);
+            var selectedLaunchables = CompositeLaunchables.Where(x => x.IsSelected == true);
             foreach (var launchable in selectedLaunchables)
                 launchable.Launch();
+                */
         }
     }
 }

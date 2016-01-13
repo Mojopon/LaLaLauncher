@@ -44,7 +44,14 @@ namespace LaLaLauncher.Models
 
         public Launchable() { }
 
-        public Launchable(string path)
+        public static Launchable Create(string path)
+        {
+            if (!File.Exists(path)) return null;
+
+            return new Launchable(path);
+        }
+
+        private Launchable(string path)
         {
             Path = path;
 

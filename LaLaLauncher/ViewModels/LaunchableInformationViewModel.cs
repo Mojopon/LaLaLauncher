@@ -62,8 +62,6 @@ namespace LaLaLauncher.ViewModels
         public LaunchableInformationViewModel(Launchable selectedLaunchable)
         {
             SelectedLaunchable = selectedLaunchable;
-            if (selectedLaunchable != null)
-                Console.WriteLine(selectedLaunchable.Name);
         }
 
         public LaunchableInformationViewModel()

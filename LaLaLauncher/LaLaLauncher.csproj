@@ -96,6 +96,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\LaunchableGroup.cs" />
     <Compile Include="Models\Launchable.cs" />
     <Compile Include="Models\Managers\LaunchableManager.cs" />
     <Compile Include="Settings\Provider.cs" />
