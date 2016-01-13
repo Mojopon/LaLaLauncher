@@ -22,7 +22,7 @@ namespace LaLaLauncher.ViewModels
         private ObservableCollection<Launchable> _Launchables = new ObservableCollection<Launchable>();
         public ObservableCollection<Launchable> Launchables { get { return _Launchables; } }
 
-#region SelectedItem変更通知プロパティ
+        #region SelectedItem変更通知プロパティ
         private Launchable _SelectedLaunchable;
 
         public Launchable SelectedLaunchable
@@ -30,11 +30,12 @@ namespace LaLaLauncher.ViewModels
             get
             { return _SelectedLaunchable; }
             set
-            { 
+            {
                 if (_SelectedLaunchable == value)
                     return;
                 _SelectedLaunchable = value;
                 RaisePropertyChanged();
+                UpdateLaunchableInformation();
                 if (_SelectedLaunchable != null)
                 {
                     LaunchableSelected = true;
@@ -65,11 +66,34 @@ namespace LaLaLauncher.ViewModels
         #endregion
 
 
+        #region InformationContent変更通知プロパティ
+        private LaunchableInformationViewModel _InformationContent;
+
+        public LaunchableInformationViewModel InformationContent
+        {
+            get
+            { return _InformationContent; }
+            set
+            { 
+                if (_InformationContent == value)
+                    return;
+                _InformationContent = value;
+                RaisePropertyChanged();
+            }
+        }
+        #endregion
+
 
         public LaunchableListViewModel()
         {
             LaunchableSelected = false;
             _Launchables = LaunchableManager.Instance.GetLaunchables();
+            UpdateLaunchableInformation();
+        }
+
+        void UpdateLaunchableInformation()
+        {
+            InformationContent = new LaunchableInformationViewModel(_SelectedLaunchable);
         }
 
         public void Initialize()

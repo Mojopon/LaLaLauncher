@@ -12,7 +12,6 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
         Title="LaLaLauncher" Height="350" Width="525">
-
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="ContentRendered">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
@@ -24,7 +23,7 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <ContentControl x:Name="mainContent" Content="{Binding Content}">
+        <ContentControl Grid.Column="0" x:Name="mainContent" Content="{Binding Content}">
             <ContentControl.Resources>
                 <DataTemplate DataType="{x:Type viewmodels:LaunchableListViewModel}">
                     <local:LaunchableList />

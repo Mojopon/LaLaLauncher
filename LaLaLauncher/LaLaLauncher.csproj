@@ -102,12 +102,20 @@
     <Compile Include="Utility\FileUtility.cs" />
     <Compile Include="Utility\IconUtility.cs" />
     <Compile Include="Utility\PathUtility.cs" />
+    <Compile Include="ViewModels\LaunchableInformationViewModel.cs" />
     <Compile Include="ViewModels\LaunchableListViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\LaunchableInformation.xaml.cs">
+      <DependentUpon>LaunchableInformation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LaunchableList.xaml.cs">
       <DependentUpon>LaunchableList.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowService.cs" />
+    <Page Include="Views\LaunchableInformation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LaunchableList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LaLaLauncher.Utility;
 
 namespace LaLaLauncher.Views
 {
@@ -26,7 +27,7 @@ namespace LaLaLauncher.Views
             InitializeComponent();
         }
 
-        private void Window_Drop(object sender, DragEventArgs e)
+        private void ListView_Drop(object sender, DragEventArgs e)
         {
             LaunchableListViewModel viewModel = DataContext as LaunchableListViewModel;
             string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];

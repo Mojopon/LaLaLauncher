@@ -9,7 +9,7 @@
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance viewmodels:LaunchableListViewModel}">
 
     <i:Interaction.Triggers>
@@ -22,7 +22,21 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.Resources>
+            <Style TargetType="{x:Type local:LaunchableInformation}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding LaunchableSelected}" Value="true">
+                        <Setter Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding LaunchableSelected}" Value="false">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <DataTemplate x:Key="IconDisplayTemplate">
                 <WrapPanel>
                     <Image Source="{Binding Icon}" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
@@ -36,40 +50,42 @@
                 <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
             </Style>
         </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Name="createNewButton" Grid.Column="0" Width="80" Height="30" Content="Add">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddNewLaunchable" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Button Name="launchButton" Grid.Column="1" Width="80" Height="30" Content="Launch" IsEnabled="{Binding LaunchableSelected}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LaunchSelected" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Button Name="deleteButton" Grid.Column="2" Width="80" Height="30" Content="Delete" IsEnabled="{Binding LaunchableSelected}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DeleteSelectedLaunchable" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-        </Grid>
-        <ListView 
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <Button Name="createNewButton" Grid.Column="0" Width="60" Height="30" Content="New">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="AddNewLaunchable" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Name="launchButton" Grid.Column="1" Width="60" Height="30" Content="Launch" IsEnabled="{Binding LaunchableSelected}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="LaunchSelected" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button Name="deleteButton" Grid.Column="2" Width="60" Height="30" Content="Delete" IsEnabled="{Binding LaunchableSelected}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="DeleteSelectedLaunchable" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+
+            <ListView 
             Grid.Row="1"
             Name="applicationListView"
             ItemsSource="{Binding Launchables}"
@@ -77,13 +93,20 @@
             ItemContainerStyle="{DynamicResource ListViewItemStyle}"
             SelectionMode="Extended"
             AllowDrop="True"
-            Drop="Window_Drop">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" Width="200" CellTemplate="{StaticResource IconDisplayTemplate}"/>
-                    <GridViewColumn Header="Path" Width="300" DisplayMemberBinding="{Binding Path}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+            Drop="ListView_Drop">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" Width="230" CellTemplate="{StaticResource IconDisplayTemplate}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <ContentControl Grid.Column="1" x:Name="informationContent" Content="{Binding InformationContent}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:LaunchableInformationViewModel}">
+                    <local:LaunchableInformation />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
     </Grid>
 </UserControl>
